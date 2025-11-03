@@ -20,13 +20,24 @@ st.markdown("""
     .main .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
-        max-width: 1000px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* 태블릿 반응형 */
+    @media (max-width: 1024px) {
+        .main .block-container {
+            max-width: 95%;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
     }
 
     /* 모바일 반응형 */
     @media (max-width: 768px) {
         .main .block-container {
             padding: 1rem;
+            max-width: 100%;
         }
 
         h1 {
@@ -34,7 +45,7 @@ st.markdown("""
         }
 
         h2 {
-            font-size: 1.2rem !important;
+            font-size: 1.1rem !important;
         }
 
         h3 {
@@ -43,6 +54,30 @@ st.markdown("""
 
         [data-testid="stMetricValue"] {
             font-size: 1.3rem !important;
+        }
+
+        [data-testid="stMetricLabel"] {
+            font-size: 0.8rem !important;
+        }
+
+        /* 모바일에서 열 간격 조정 */
+        [data-testid="column"] {
+            padding: 0.25rem !important;
+        }
+    }
+
+    /* 작은 모바일 */
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.3rem !important;
+        }
+
+        .subtitle {
+            font-size: 0.85rem !important;
+        }
+
+        [data-testid="stMetricValue"] {
+            font-size: 1.1rem !important;
         }
     }
 
