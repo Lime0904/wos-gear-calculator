@@ -313,12 +313,12 @@ default_tar = "Legendary T4 3*" if "Legendary T4 3*" in gear_levels else "Gold"
 
 # 부위별 병종 매핑
 part_unit_type = {
-    "Hat": "창병",
-    "Watch": "창병",
-    "Coat": "방패병",
-    "Pants": "방패병",
-    "Ring": "궁병",
-    "Cudgel": "궁병"
+    "Hat": "창",
+    "Watch": "창",
+    "Coat": "방패",
+    "Pants": "방패",
+    "Ring": "궁",
+    "Cudgel": "궁"
 }
 
 # 부위 레이아웃: 2열 x 3행 (창병 -> 방패병 -> 궁병)
@@ -439,11 +439,20 @@ if calculate_btn:
                 total_needed[k] += amount
                 part_resources[k] += amount
 
+        # 병종 정보 추가
+        unit_type = part_unit_type.get(
+            [k for k, v in gear_parts_kor.items() if v == part][0], ""
+        )
+
         upgrade_details.append({
+            "병종": unit_type,
             "부위": part,
             "현재": level_labels.get(cur, cur),
             "목표": level_labels.get(tar, tar),
-            **{f"{k}": part_resources[k] for k in user_owned}
+            "설계도면": part_resources["Design"],
+            "합금": part_resources["Alloy"],
+            "윤활제": part_resources["Polish"],
+            "앰버": part_resources["Amber"]
         })
 
     if not has_upgrade:
@@ -525,7 +534,7 @@ st.markdown("---")
 st.markdown("""
 <div style='text-align:center; padding: 1.5rem; color: #a0aec0;'>
     <p style='font-size: 0.85rem; margin: 0;'>
-        Made by <b>Lime</b>
+        Made by <b>TORI</b>
     </p>
     <p style='font-size: 0.75rem; margin-top: 0.3rem;'>
         v2.0 · T4 신규레벨 반영 · 최종 수정 2025.11.03
