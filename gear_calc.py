@@ -4,7 +4,7 @@ import pandas as pd
 # 페이지 설정
 st.set_page_config(
     page_title="WOS 영주장비 계산기",
-    layout="wide",
+    layout="centered",
     initial_sidebar_state="collapsed"
 )
 
