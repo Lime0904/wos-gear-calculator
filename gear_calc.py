@@ -1,3 +1,10 @@
+"""
+WOS 영주장비 계산기
+- v2.1 (2025.11.07)
+- T4 신규 레벨 반영 (신화 T3 3성-1 ~ 신화 T4 3성)
+- 패키지 구매 기능 추가 (동적 행 추가/삭제)
+"""
+
 import streamlit as st
 import pandas as pd
 
