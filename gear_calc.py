@@ -636,7 +636,7 @@ st.markdown("""
         Made by <b>TORI</b>
     </p>
     <p style='font-size: 0.75rem; margin-top: 0.3rem;'>
-        v2.0 · T4 신규레벨 반영 · 최종 수정 2025.11.03
+        v2.1 · 패키지 구매 기능 추가 · 최종 수정 2025.11.07
     </p>
 </div>
 """, unsafe_allow_html=True)
