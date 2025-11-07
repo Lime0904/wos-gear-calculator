@@ -408,8 +408,105 @@ user_owned = {
     ),
 }
 
-# 총 보유 자원 계산
-total_owned = user_owned.copy()
+# 패키지 구매 섹션 (접어두기)
+st.markdown("---")
+with st.expander("📦 패키지 구매 (선택사항)", expanded=False):
+    st.markdown("구매한 패키지의 자원을 입력하세요")
+
+    # 세션 스테이트 초기화
+    if 'packages' not in st.session_state:
+        st.session_state.packages = []
+
+    # 패키지 추가 버튼
+    col_add1, col_add2, col_add3 = st.columns([1, 1, 1])
+    with col_add2:
+        if st.button("➕ 패키지 추가", use_container_width=True):
+            st.session_state.packages.append({
+                "name": "",
+                "Design": 0,
+                "Alloy": 0,
+                "Polish": 0,
+                "Amber": 0
+            })
+            st.rerun()
+
+    # 패키지 목록 표시
+    if st.session_state.packages:
+        st.markdown("---")
+        for idx, package in enumerate(st.session_state.packages):
+            with st.container():
+                col_del, col_name = st.columns([1, 5])
+                with col_del:
+                    if st.button("🗑️", key=f"del_{idx}", help="삭제"):
+                        st.session_state.packages.pop(idx)
+                        st.rerun()
+                with col_name:
+                    st.session_state.packages[idx]["name"] = st.text_input(
+                        "패키지 이름",
+                        value=package["name"],
+                        key=f"name_{idx}",
+                        placeholder="예: 보급 패키지"
+                    )
+
+                cols = st.columns(4)
+                st.session_state.packages[idx]["Design"] = cols[0].number_input(
+                    "설계도면",
+                    min_value=0,
+                    value=package["Design"],
+                    step=100,
+                    key=f"design_{idx}"
+                )
+                st.session_state.packages[idx]["Alloy"] = cols[1].number_input(
+                    "합금",
+                    min_value=0,
+                    value=package["Alloy"],
+                    step=1000,
+                    key=f"alloy_{idx}"
+                )
+                st.session_state.packages[idx]["Polish"] = cols[2].number_input(
+                    "윤활제",
+                    min_value=0,
+                    value=package["Polish"],
+                    step=100,
+                    key=f"polish_{idx}"
+                )
+                st.session_state.packages[idx]["Amber"] = cols[3].number_input(
+                    "앰버",
+                    min_value=0,
+                    value=package["Amber"],
+                    step=10,
+                    key=f"amber_{idx}"
+                )
+                st.markdown("---")
+
+        # 패키지 합계 표시
+        st.markdown("### 패키지 총합")
+        package_totals = {k: 0 for k in user_owned}
+        for package in st.session_state.packages:
+            for k in package_totals:
+                package_totals[k] += package.get(k, 0)
+
+        summary_cols = st.columns(4)
+        resource_names = {
+            "Design": "설계도면",
+            "Alloy": "합금",
+            "Polish": "윤활제",
+            "Amber": "앰버"
+        }
+        for i, (k, v) in enumerate(package_totals.items()):
+            with summary_cols[i]:
+                st.metric(label=resource_names[k], value=f"{v:,}")
+    else:
+        st.info("패키지를 추가하려면 위의 '➕ 패키지 추가' 버튼을 클릭하세요")
+
+# 총 보유 자원 계산 (패키지 포함)
+package_totals = {k: 0 for k in user_owned}
+if 'packages' in st.session_state:
+    for package in st.session_state.packages:
+        for k in package_totals:
+            package_totals[k] += package.get(k, 0)
+
+total_owned = {k: user_owned[k] + package_totals[k] for k in user_owned}
 
 st.markdown("---")
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -509,7 +606,9 @@ if calculate_btn:
             result_data.append({
                 "자원": resource_names[k],
                 "필요량": f"{total_needed[k]:,}",
-                "보유량": f"{total_owned.get(k, 0):,}",
+                "기본 보유": f"{user_owned.get(k, 0):,}",
+                "패키지 구매": f"{package_totals.get(k, 0):,}",
+                "총 보유": f"{total_owned.get(k, 0):,}",
                 "부족량": f"{max(0, total_needed[k] - total_owned.get(k, 0)):,}"
             })
 
